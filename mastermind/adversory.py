@@ -17,6 +17,15 @@ class AutoMaster(Master):
     def score(self, candidate:Solution) -> ScoredCandidate:
         return ScoredCandidate.compute(target=self.target, candidate=candidate)
 
+class HumanMaster(Master):
+    def score(self, candidate:Solution) -> ScoredCandidate:
+        print(f"Player plays {candidate}.")
+        n_pres = int(input("Num presents? "))
+        assert n_pres in range(0,5)
+        n_pos = int(input("Num exacts? "))
+        assert n_pos in range(0,5)
+        return ScoredCandidate(candidate=candidate, num_presents = n_pres, num_exacts = n_pos)
+
 class Player():
     def play(self, history:List[ScoredCandidate]) -> Solution:
         pass
