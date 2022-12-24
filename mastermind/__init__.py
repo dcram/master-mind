@@ -44,6 +44,15 @@ class Solution(BaseModel):
     def color_indices(self):
         return [c.value for c in self.colors()]
 
+    @staticmethod
+    def random():
+        return Solution(
+            color1=Color.random(),
+            color2=Color.random(),
+            color3=Color.random(),
+            color4=Color.random()
+        )
+
 class ScoredCandidate(BaseModel):
     candidate: Solution
     num_presents: int

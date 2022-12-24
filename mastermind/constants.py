@@ -1,5 +1,5 @@
 from enum import Enum
-
+from typing import List
 
 class Color(Enum):
     blue: int = 0
@@ -11,3 +11,13 @@ class Color(Enum):
     white: int = 6
     yellow: int = 7
 
+    @staticmethod
+    def values() -> List["Color"]:
+        return [e.value for e in Color]
+
+    @staticmethod
+    def random() -> List["Color"]:
+        import random
+        values = Color.values()
+        idx = random.randint(0, len(values) - 1)
+        return values[idx]
