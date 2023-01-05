@@ -59,7 +59,7 @@ class ScoredPresenceCandidate(BaseModel):
         )
 
 
-class SolutionCallback(cp_model.CpSolverSolutionCallback):
+class PresenceSolutionCallback(cp_model.CpSolverSolutionCallback):
     """Print intermediate solutions."""
 
     def __init__(self, variables):
@@ -83,46 +83,6 @@ class SolutionCallback(cp_model.CpSolverSolutionCallback):
     def solution_count(self):
         return self.__solution_count
 
-import random
-
-def next_presence_candidate(candidates: List[PresenceCandidate]) -> Solution:
-    assert candidates
-    next_sol = random.choice(candidates)
-    colors = [cocc.color for cocc in next_sol.color_occs()]
-    random.shuffle(colors)
-    solution = Solution(color1=colors[0], color2=colors[1], color3=colors[2], color4=colors[3])
-    return solution
 
 
-def solve_presence(history: List[ScoredCandidate]) -> List[PresenceCandidate]:
 
-    hist: List[ScoredPresenceCandidate] = [ScoredPresenceCandidate.from_scored_candidate(scand) for scand in history]
-    model = cp_model.CpModel()
-
-    variables = {}
-    for c in Color:
-        for occ in range(0,4):
-            variables[(c, occ)] = model.NewIntVar(0, 1, f'color_{c.name}_{occ}')
-
-    # Exactement quatre cases
-    model.Add(sum(variables[c, occ] for c in Color for occ in range(0, 4)) == 4)
-
-    for c in Color:
-        # Si Vert1 est présent alors Vert0 aussi
-        model.Add(variables[c, 0] >= variables[c, 1])
-        # Si Vert2 est présent alors Vert1 aussi
-        model.Add(variables[c, 1] >= variables[c, 2])
-        # Si Vert3 est présent alors Vert2 aussi
-        model.Add(variables[c, 2] >= variables[c, 3])
-
-    for sol in hist:
-        # num presents
-        model.Add(sum(variables[c.color, c.occ] for c in sol.candidate.color_occs()) == sol.num_ok)
-
-    solver = cp_model.CpSolver()
-    solution_callback = SolutionCallback(variables)
-    solver.parameters.enumerate_all_solutions = True
-
-    solver.Solve(model, solution_callback)
-
-    return solution_callback.solutions

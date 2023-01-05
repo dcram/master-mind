@@ -16,6 +16,9 @@ class Color(Enum):
         return [e.value for e in Color]
 
     @staticmethod
+    def from_int(code: int) -> "Color":
+        return next(c for c in Color.values() if c == code)
+    @staticmethod
     def random() -> List["Color"]:
         import random
         values = Color.values()

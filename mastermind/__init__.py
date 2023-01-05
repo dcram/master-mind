@@ -45,6 +45,18 @@ class Solution(BaseModel):
         return [c.value for c in self.colors()]
 
     @staticmethod
+    def from_colors(colors: List[Color]):
+        assert len(colors) == 4
+        return sol(*colors)
+
+    @staticmethod
+    def next_alldiff():
+        import random
+        colors = list(range(0, len(Color.values())))
+        random.shuffle(colors)
+        return sol(*colors[:4])
+
+    @staticmethod
     def random():
         return Solution(
             color1=Color.random(),
@@ -70,7 +82,9 @@ class ScoredCandidate(BaseModel):
         )
 
 
-def solution(color1, color2, color3, color4):
+def isol(color1:int, color2:int, color3:int, color4:int) -> Solution:
+    return sol(Color.from_int(color1), Color.from_int(color2), Color.from_int(color3), Color.from_int(color4))
+def sol(color1: Color, color2: Color, color3: Color, color4: Color) -> Solution:
     return Solution(color1=color1, color2=color2, color3=color3, color4=color4)
 
 
