@@ -10,10 +10,10 @@ games = [
         master = AutoMaster(solution=Solution.next_alldiff()),
         player = AutoPlayer(
             strategy=PosStrategy.optimize_positions,
-            first_candidates=[isol(0,0,1,2),isol(3,3,5,6),]
+            first_candidates=[isol(0,1,2,3),isol(2,3,4,5)]
         ),
         max_tours=20)
-    for i in range(0, 75)]
+    for i in range(0, 250)]
 endTime = time.time()
 
 print("******************************************")

@@ -8,8 +8,8 @@ class Color(Enum):
     pink: int = 3
     purple: int = 4
     red: int = 5
-    white: int = 6
-    yellow: int = 7
+    # white: int = 6
+    # yellow: int = 7
 
     @staticmethod
     def values() -> List["Color"]:
